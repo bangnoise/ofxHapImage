@@ -187,6 +187,7 @@ void ofxHapImage::saveImage(const ofFile &file)
 
 void ofxHapImage::saveImage(const std::string &fileName)
 {
+    // TODO: this involves an unnecessary copy , see saveImage()
     ofBuffer buffer;
     saveImage(buffer);
     ofBufferToFile(fileName, buffer, true);
@@ -208,7 +209,11 @@ void ofxHapImage::saveImage(ofBuffer &buffer)
         default:
             break;
     }
-    buffer.allocate(HapMaxEncodedLength(dxt_buffer_.size(), format, 1) + 1); // TODO: ofBuffer allocate -1 bug, see other notes
+    /*
+     ofBuffer doesn't allow a buffer to be shrunk, so we have to encode to a larger vector then
+     copy to the buffer afterwards
+     */
+    std::vector<char> destination(HapMaxEncodedLength(dxt_buffer_.size(), format, 1));
     unsigned long buffer_used = 0;
     unsigned int result = HapEncode(dxt_buffer_.getBinaryBuffer(),
                                     dxt_buffer_.size(),
@@ -216,12 +221,16 @@ void ofxHapImage::saveImage(ofBuffer &buffer)
                                     width_, height_,
                                     HapCompressorSnappy,
                                     1,
-                                    buffer.getBinaryBuffer(),
-                                    buffer.size(),
+                                    &destination[0],
+                                    destination.size(),
                                     &buffer_used);
     if (result != HapResult_No_Error)
     {
         buffer.clear();
+    }
+    else
+    {
+        buffer.set(&destination[0], buffer_used);
     }
 }
 
