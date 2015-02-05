@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxHapImage\src\ofxHapImage.cpp">
+			<Filter>addons\ofxHapImage\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxHapImage\libs\Hap\src\hap.c">
+			<Filter>addons\ofxHapImage\libs\Hap\src</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="src">
+			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons">
+			<UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage">
+			<UniqueIdentifier>{6A30D6F6-C9CD-9012-5B54-FD73}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage\src">
+			<UniqueIdentifier>{82B34651-C318-97F5-11EE-798A}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage\libs">
+			<UniqueIdentifier>{FD967088-790D-D39A-8160-141C}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage\libs\Hap">
+			<UniqueIdentifier>{DCC10343-E374-139D-37F8-DFDF}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage\libs\Hap\src">
+			<UniqueIdentifier>{3B6F2EEC-472C-080F-7FDC-A77D}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage\libs\snappy">
+			<UniqueIdentifier>{E7454D3E-6407-13F0-5B0A-7B76}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage\libs\snappy\include">
+			<UniqueIdentifier>{EC43959F-000D-0F8B-B037-33B5}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage\libs\squish">
+			<UniqueIdentifier>{0D6BBDAE-BE47-3FE4-FDA7-79A9}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage\libs\squish\include">
+			<UniqueIdentifier>{B2F7E5DB-BFE5-EFB1-D6D6-4A5B}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\src\ofxHapImage.h">
+			<Filter>addons\ofxHapImage\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\Hap\src\hap.h">
+			<Filter>addons\ofxHapImage\libs\Hap\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\snappy\include\snappy-c.h">
+			<Filter>addons\ofxHapImage\libs\snappy\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\snappy\include\snappy-sinksource.h">
+			<Filter>addons\ofxHapImage\libs\snappy\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\snappy\include\snappy-stubs-public.h">
+			<Filter>addons\ofxHapImage\libs\snappy\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\snappy\include\snappy.h">
+			<Filter>addons\ofxHapImage\libs\snappy\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\squish\include\squish.h">
+			<Filter>addons\ofxHapImage\libs\squish\include</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="icon.rc" />
+	</ItemGroup>
+</Project>
