@@ -79,4 +79,12 @@ void ofApp::dragEvent(ofDragInfo dragInfo) {
             images.push_back(image);
         }
     }
+    if (dragInfo.files.size() > 0)
+    {
+        ofSetWindowTitle(ofFilePath::getFileName(dragInfo.files[0]));
+    }
+    else
+    {
+        ofSetWindowTitle("");
+    }
 }
