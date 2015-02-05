@@ -115,16 +115,21 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
         {
             decompressed_size /= 2;
         }
-        dxt_buffer_.allocate(decompressed_size + 1); // TODO: bug in ofBuffer adds 1 to every size except in allocate()
+        if (dxt_buffer_.size() != decompressed_size)
+        {
+            dxt_buffer_.allocate(decompressed_size + 1); // TODO: bug in ofBuffer adds 1 to every size except in allocate()
+        }
         result = HapDecode(buffer.getBinaryBuffer(), buffer.size(), ofxHapImageHapDecodeCallback, NULL, dxt_buffer_.getBinaryBuffer(), dxt_buffer_.size(), &output_buffer_bytes_used, &format);
     }
-    texture_needs_update_ = true;
     if (result == HapResult_No_Error)
     {
+        texture_needs_update_ = true;
         return true;
     }
     else
     {
+        width_ = height_ = 0;
+        texture_.clear();
         dxt_buffer_.clear();
         return false;
     }
@@ -140,25 +145,39 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
     }
     // Initial calculation gives largest size, for Hap Alpha and Hap Q
     size_t dxt_size = ofxHapRoundUpToMultipleOf4(image.getWidth() * ofxHapRoundUpToMultipleOf4(image.getHeight()));
+    int squish_flags = squish::kColourClusterFit;
+    bool result = true;
     switch (type) {
         case IMAGE_TYPE_HAP:
             dxt_size /= 2;
-            dxt_buffer_.allocate(dxt_size + 1); // TODO: bug in Buffer means it adds 1 to every size-related action except here
-            squish::CompressImage(image.getPixels(), image.getWidth(), image.getHeight(), dxt_buffer_.getBinaryBuffer(), squish::kDxt1 | squish::kColourClusterFit);
+            squish_flags |= squish::kDxt1;
             break;
         case IMAGE_TYPE_HAP_ALPHA:
-            dxt_buffer_.allocate(dxt_size + 1); // TODO: bug in Buffer means it adds 1 to every size-related action except here
-            squish::CompressImage(image.getPixels(), image.getWidth(), image.getHeight(), dxt_buffer_.getBinaryBuffer(), squish::kDxt5 | squish::kColourClusterFit);
+            squish_flags |= squish::kDxt5;
             break;
         default:
-            dxt_buffer_.clear();
+            result = false;
             break;
     }
-    type_ = type;
-    width_ = image.getWidth();
-    height_ = image.getHeight();
-    texture_needs_update_ = true;
-    return true;
+    if (result == true)
+    {
+        if (dxt_buffer_.size() != dxt_size)
+        {
+            dxt_buffer_.allocate(dxt_size + 1); // TODO: bug in ofBuffer means it adds 1 to every size-related action except here
+        }
+        squish::CompressImage(image.getPixels(), image.getWidth(), image.getHeight(), dxt_buffer_.getBinaryBuffer(), squish::kDxt1 | squish::kColourClusterFit);
+        type_ = type;
+        width_ = image.getWidth();
+        height_ = image.getHeight();
+        texture_needs_update_ = true;
+    }
+    else
+    {
+        width_ = height_ = 0;
+        texture_.clear();
+        dxt_buffer_.clear();
+    }
+    return result;
 }
 
 void ofxHapImage::saveImage(const ofFile &file)
