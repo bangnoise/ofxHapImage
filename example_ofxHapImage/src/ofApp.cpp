@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    save_type = ofxHapImage::OFX_HAPIMAGE_HAP; // TODO: allow config type
+    save_type = ofxHapImage::IMAGE_TYPE_HAP; // TODO: allow config type
 }
 
 //--------------------------------------------------------------

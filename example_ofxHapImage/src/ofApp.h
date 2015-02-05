@@ -21,5 +21,5 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
     std::vector<ofxHapImage> images;
-    ofxHapImage::ofxHapType save_type;
+    ofxHapImage::ImageType save_type;
 };

@@ -32,7 +32,7 @@ std::string ofxHapImage::HapImageFileExtension()
 }
 
 ofxHapImage::ofxHapImage() :
-texture_needs_update_(true), width_(0), height_(0), type_(OFX_HAPIMAGE_HAP)
+texture_needs_update_(true), width_(0), height_(0), type_(IMAGE_TYPE_HAP)
 {
 
 }
@@ -57,7 +57,7 @@ ofxHapImage::ofxHapImage(const ofBuffer& buffer)
     loadImage(buffer);
 }
 
-ofxHapImage::ofxHapImage(ofImage& image, ofxHapType type)
+ofxHapImage::ofxHapImage(ofImage& image, ofxHapImage::ImageType type)
 {
     loadImage(image, type);
 }
@@ -95,13 +95,13 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
     {
         switch (format) {
             case HapTextureFormat_RGB_DXT1:
-                type_ = OFX_HAPIMAGE_HAP;
+                type_ = IMAGE_TYPE_HAP;
                 break;
             case HapTextureFormat_RGBA_DXT5:
-                type_ = OFX_HAPIMAGE_HAP_ALPHA;
+                type_ = IMAGE_TYPE_HAP_ALPHA;
                 break;
             case HapTextureFormat_YCoCg_DXT5:
-                type_ = OFX_HAPIMAGE_HAP_Q;
+                type_ = IMAGE_TYPE_HAP_Q;
                 break;
             default:
                 break;
@@ -130,7 +130,7 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
     }
 }
 
-bool ofxHapImage::loadImage(ofImage &image, ofxHapType type)
+bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
 {
     ofImageType input_type = image.getPixelsRef().getImageType();
     if (input_type != OF_IMAGE_COLOR_ALPHA)
@@ -141,12 +141,12 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapType type)
     // Initial calculation gives largest size, for Hap Alpha and Hap Q
     size_t dxt_size = ofxHapRoundUpToMultipleOf4(image.getWidth() * ofxHapRoundUpToMultipleOf4(image.getHeight()));
     switch (type) {
-        case OFX_HAPIMAGE_HAP:
+        case IMAGE_TYPE_HAP:
             dxt_size /= 2;
             dxt_buffer_.allocate(dxt_size + 1); // TODO: bug in Buffer means it adds 1 to every size-related action except here
             squish::CompressImage(image.getPixels(), image.getWidth(), image.getHeight(), dxt_buffer_.getBinaryBuffer(), squish::kDxt1 | squish::kColourClusterFit);
             break;
-        case OFX_HAPIMAGE_HAP_ALPHA:
+        case IMAGE_TYPE_HAP_ALPHA:
             dxt_buffer_.allocate(dxt_size + 1); // TODO: bug in Buffer means it adds 1 to every size-related action except here
             squish::CompressImage(image.getPixels(), image.getWidth(), image.getHeight(), dxt_buffer_.getBinaryBuffer(), squish::kDxt5 | squish::kColourClusterFit);
             break;
@@ -177,13 +177,13 @@ void ofxHapImage::saveImage(ofBuffer &buffer)
 {
     unsigned int format;
     switch (type_) {
-        case OFX_HAPIMAGE_HAP:
+        case IMAGE_TYPE_HAP:
             format = HapTextureFormat_RGB_DXT1;
             break;
-        case OFX_HAPIMAGE_HAP_ALPHA:
+        case IMAGE_TYPE_HAP_ALPHA:
             format = HapTextureFormat_RGBA_DXT5;
             break;
-        case OFX_HAPIMAGE_HAP_Q:
+        case IMAGE_TYPE_HAP_Q:
             format = HapTextureFormat_YCoCg_DXT5;
             break;
         default:
@@ -216,6 +216,11 @@ float ofxHapImage::getHeight()
     return height_;
 }
 
+ofxHapImage::ImageType ofxHapImage::getImageType()
+{
+    return type_;
+}
+
 ofTexture& ofxHapImage::getTextureReference()
 {
     if (texture_needs_update_ && dxt_buffer_.size() > 0 && width_ > 0 && height_ > 0)
@@ -223,7 +228,7 @@ ofTexture& ofxHapImage::getTextureReference()
         /*
          Prepare our texture for DXT upload
          */
-        GLint internal_type = (type_ == OFX_HAPIMAGE_HAP ? GL_COMPRESSED_RGB_S3TC_DXT1_EXT : GL_COMPRESSED_RGBA_S3TC_DXT5_EXT);
+        GLint internal_type = (type_ == IMAGE_TYPE_HAP ? GL_COMPRESSED_RGB_S3TC_DXT1_EXT : GL_COMPRESSED_RGBA_S3TC_DXT5_EXT);
 
         unsigned int rounded_width = ofxHapRoundUpToMultipleOf4(width_);
         unsigned int rounded_height = ofxHapRoundUpToMultipleOf4(height_);

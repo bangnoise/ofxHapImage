@@ -5,10 +5,10 @@
 
 class ofxHapImage : public ofAbstractImage {
 public:
-    enum ofxHapType {
-        OFX_HAPIMAGE_HAP,
-        OFX_HAPIMAGE_HAP_ALPHA,
-        OFX_HAPIMAGE_HAP_Q // TODO: Not supported yet
+    enum ImageType {
+        IMAGE_TYPE_HAP,
+        IMAGE_TYPE_HAP_ALPHA,
+        IMAGE_TYPE_HAP_Q // TODO: Not supported yet
     };
 
     static std::string HapImageFileExtension();
@@ -28,7 +28,7 @@ public:
     /*
      Create a new Hap image
      */
-    ofxHapImage(ofImage& image, ofxHapType type);
+    ofxHapImage(ofImage& image, ofxHapImage::ImageType type);
 
     /*
      Load an existing Hap image
@@ -42,7 +42,7 @@ public:
     /*
      Create a  new Hap image
      */
-    bool loadImage(ofImage& image, ofxHapType type);
+    bool loadImage(ofImage& image, ofxHapImage::ImageType type);
 
     /*
      Save a Hap image
@@ -64,6 +64,8 @@ public:
     
     float getWidth();
 
+    ofxHapImage::ImageType getImageType();
+
     ofTexture& getTextureReference();
 
     // This is ignored, we always use a texture
@@ -73,7 +75,7 @@ private:
     ofBuffer dxt_buffer_;
     ofTexture texture_;
     bool texture_needs_update_;
-    ofxHapType type_;
+    ofxHapImage::ImageType type_;
     unsigned int width_;
     unsigned int height_;
 };
