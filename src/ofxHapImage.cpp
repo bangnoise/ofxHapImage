@@ -6,6 +6,9 @@
 #include <ppl.h>
 #endif
 
+// Must be a multiple of 4
+#define kofxHapImageMTChunkHeight 32
+
 namespace ofxHapImagePrivate {
     static void decodeCallback(HapDecodeWorkFunction function, void *p, unsigned int count, void *info)
     {
@@ -167,7 +170,29 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
         {
             dxt_buffer_.allocate(dxt_size + 1); // TODO: bug in ofBuffer means it adds 1 to every size-related action except here
         }
-        squish::CompressImage(image.getPixels(), image.getWidth(), image.getHeight(), dxt_buffer_.getBinaryBuffer(), squish::kDxt1 | squish::kColourClusterFit);
+        unsigned int divisions = image.getHeight() / kofxHapImageMTChunkHeight;
+        if ((int)image.getHeight() % kofxHapImageMTChunkHeight != 0)
+        {
+            divisions++;
+        }
+        ofPixels pixels = image.getPixelsRef();
+        size_t dxt_bytes_per_division = image.getWidth() * kofxHapImageMTChunkHeight;
+        if (type == IMAGE_TYPE_HAP)
+        {
+            dxt_bytes_per_division /= 2;
+        }
+#if defined(__APPLE__)
+        dispatch_apply(divisions, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
+#else
+        concurrency::parallel_for((unsigned int)0, divisions, [&](unsigned int index) {
+#endif
+            squish::CompressImage(&pixels[pixels.getPixelIndex(0, index * kofxHapImageMTChunkHeight)],
+                                  image.getWidth(),
+                                  MIN(kofxHapImageMTChunkHeight, image.getHeight() - (kofxHapImageMTChunkHeight * index)),
+                                  dxt_buffer_.getBinaryBuffer() + (dxt_bytes_per_division * index),
+                                  squish_flags);
+        });
+
         type_ = type;
         width_ = image.getWidth();
         height_ = image.getHeight();
