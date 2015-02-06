@@ -9,6 +9,8 @@
 // Must be a multiple of 4
 #define kofxHapImageMTChunkHeight 32
 
+#define kofxHapImageEncodeChunkCount 4
+
 namespace ofxHapImagePrivate {
     static void decodeCallback(HapDecodeWorkFunction function, void *p, unsigned int count, void *info)
     {
@@ -240,14 +242,14 @@ void ofxHapImage::saveImage(ofBuffer &buffer)
      ofBuffer doesn't allow a buffer to be shrunk, so we have to encode to a larger vector then
      copy to the buffer afterwards
      */
-    std::vector<char> destination(HapMaxEncodedLength(dxt_buffer_.size(), format, 1));
+    std::vector<char> destination(HapMaxEncodedLength(dxt_buffer_.size(), format, kofxHapImageEncodeChunkCount));
     unsigned long buffer_used = 0;
     unsigned int result = HapEncode(dxt_buffer_.getBinaryBuffer(),
                                     dxt_buffer_.size(),
                                     format,
                                     width_, height_,
                                     HapCompressorSnappy,
-                                    1,
+                                    kofxHapImageEncodeChunkCount,
                                     &destination[0],
                                     destination.size(),
                                     &buffer_used);
