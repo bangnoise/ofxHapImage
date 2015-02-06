@@ -6,24 +6,26 @@
 #include <ppl.h>
 #endif
 
-static void ofxHapImageHapDecodeCallback(HapDecodeWorkFunction function, void *p, unsigned int count, void *info)
-{
+namespace ofxHapImagePrivate {
+    static void decodeCallback(HapDecodeWorkFunction function, void *p, unsigned int count, void *info)
+    {
 #if defined(__APPLE__)
-    dispatch_apply(count, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
-        function(p, (unsigned int)index);
-    });
+        dispatch_apply(count, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
+            function(p, (unsigned int)index);
+        });
 #else
-    concurrency::parallel_for((unsigned int)0, count, [&](unsigned int i) {
-        function(p, i);
-    });
+        concurrency::parallel_for((unsigned int)0, count, [&](unsigned int i) {
+            function(p, i);
+        });
 #endif
-}
+    }
 
-static int ofxHapRoundUpToMultipleOf4(int n)
-{
-    if(0 != (n & 3))
-        n = (n + 3) & ~3;
-    return n;
+    static int roundUpToMultipleOf4(int n)
+    {
+        if(0 != (n & 3))
+            n = (n + 3) & ~3;
+        return n;
+    }
 }
 
 std::string ofxHapImage::HapImageFileExtension()
@@ -108,7 +110,7 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
         }
         width_ = width;
         height_ = height;
-        size_t decompressed_size = ofxHapRoundUpToMultipleOf4(width) * ofxHapRoundUpToMultipleOf4(height);
+        size_t decompressed_size = ofxHapImagePrivate::roundUpToMultipleOf4(width) * ofxHapImagePrivate::roundUpToMultipleOf4(height);
         unsigned long output_buffer_bytes_used;
 
         if (format == HapTextureFormat_RGB_DXT1)
@@ -119,7 +121,7 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
         {
             dxt_buffer_.allocate(decompressed_size + 1); // TODO: bug in ofBuffer adds 1 to every size except in allocate()
         }
-        result = HapDecode(buffer.getBinaryBuffer(), buffer.size(), ofxHapImageHapDecodeCallback, NULL, dxt_buffer_.getBinaryBuffer(), dxt_buffer_.size(), &output_buffer_bytes_used, &format);
+        result = HapDecode(buffer.getBinaryBuffer(), buffer.size(), ofxHapImagePrivate::decodeCallback, NULL, dxt_buffer_.getBinaryBuffer(), dxt_buffer_.size(), &output_buffer_bytes_used, &format);
     }
     if (result == HapResult_No_Error)
     {
@@ -144,7 +146,7 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
         image.setImageType(OF_IMAGE_COLOR_ALPHA);
     }
     // Initial calculation gives largest size, for Hap Alpha and Hap Q
-    size_t dxt_size = ofxHapRoundUpToMultipleOf4(image.getWidth() * ofxHapRoundUpToMultipleOf4(image.getHeight()));
+    size_t dxt_size = ofxHapImagePrivate::roundUpToMultipleOf4(image.getWidth() * ofxHapImagePrivate::roundUpToMultipleOf4(image.getHeight()));
     int squish_flags = squish::kColourClusterFit;
     bool result = true;
     switch (type) {
@@ -258,8 +260,8 @@ ofTexture& ofxHapImage::getTextureReference()
          */
         GLint internal_type = (type_ == IMAGE_TYPE_HAP ? GL_COMPRESSED_RGB_S3TC_DXT1_EXT : GL_COMPRESSED_RGBA_S3TC_DXT5_EXT);
 
-        unsigned int rounded_width = ofxHapRoundUpToMultipleOf4(width_);
-        unsigned int rounded_height = ofxHapRoundUpToMultipleOf4(height_);
+        unsigned int rounded_width = ofxHapImagePrivate::roundUpToMultipleOf4(width_);
+        unsigned int rounded_height = ofxHapImagePrivate::roundUpToMultipleOf4(height_);
 
         if (texture_.getWidth() != rounded_width
             || texture_.getHeight() != rounded_height
