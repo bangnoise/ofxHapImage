@@ -178,7 +178,7 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
             divisions++;
         }
         ofPixels pixels = image.getPixelsRef();
-        size_t dxt_bytes_per_division = image.getWidth() * kofxHapImageMTChunkHeight;
+        size_t dxt_bytes_per_division = ofxHapImagePrivate::roundUpToMultipleOf4(image.getWidth()) * kofxHapImageMTChunkHeight;
         if (type == IMAGE_TYPE_HAP)
         {
             dxt_bytes_per_division /= 2;
