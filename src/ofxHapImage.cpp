@@ -209,20 +209,51 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
     return result;
 }
 
-void ofxHapImage::saveImage(const ofFile &file)
+void ofxHapImage::saveImage(ofFile &file)
 {
-    saveImage(file.getAbsolutePath());
+    file.changeMode(ofFile::ReadWrite, true);
+    ofBuffer buffer;
+    saveImage(buffer);
+    file << buffer;
 }
 
 void ofxHapImage::saveImage(const std::string &fileName)
 {
-    // TODO: this involves an unnecessary copy , see saveImage()
-    ofBuffer buffer;
-    saveImage(buffer);
-    ofBufferToFile(fileName, buffer, true);
+    std::ofstream file_out;
+    file_out.open(ofToDataPath(fileName).c_str(), std::ios::binary);
+    if (file_out.is_open())
+    {
+        std::vector<char> destination;
+        if (saveImage(destination))
+        {
+            file_out.write(&destination[0], destination.size());
+        }
+        file_out.close();
+    }
+    else
+    {
+        ofLogError("ofxHapImage", "Couldn't open file in saveImage()");
+    }
 }
 
 void ofxHapImage::saveImage(ofBuffer &buffer)
+{
+    /*
+     ofBuffer doesn't allow a buffer to be shrunk, so we have to encode to a vector then
+     copy to the buffer afterwards
+     */
+    std::vector<char> destination;
+    if (saveImage(destination) == true)
+    {
+        buffer.set(&destination[0], destination.size());
+    }
+    else
+    {
+        buffer.clear();
+    }
+}
+
+bool ofxHapImage::saveImage(std::vector<char>& destination)
 {
     unsigned int format;
     switch (type_) {
@@ -238,11 +269,7 @@ void ofxHapImage::saveImage(ofBuffer &buffer)
         default:
             break;
     }
-    /*
-     ofBuffer doesn't allow a buffer to be shrunk, so we have to encode to a larger vector then
-     copy to the buffer afterwards
-     */
-    std::vector<char> destination(HapMaxEncodedLength(dxt_buffer_.size(), format, kofxHapImageEncodeChunkCount));
+    destination.resize(HapMaxEncodedLength(dxt_buffer_.size(), format, kofxHapImageEncodeChunkCount));
     unsigned long buffer_used = 0;
     unsigned int result = HapEncode(dxt_buffer_.getBinaryBuffer(),
                                     dxt_buffer_.size(),
@@ -253,13 +280,15 @@ void ofxHapImage::saveImage(ofBuffer &buffer)
                                     &destination[0],
                                     destination.size(),
                                     &buffer_used);
-    if (result != HapResult_No_Error)
+    if (result == HapResult_No_Error)
     {
-        buffer.clear();
+        destination.resize(buffer_used);
+        return true;
     }
     else
     {
-        buffer.set(&destination[0], buffer_used);
+        destination.clear();
+        return false;
     }
 }
 

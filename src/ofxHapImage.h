@@ -51,7 +51,7 @@ public:
 
     void saveImage(ofBuffer& buffer);
 
-    void saveImage(const ofFile& file);
+    void saveImage(ofFile& file);
 
     /*
      Drawing
@@ -72,6 +72,7 @@ public:
     void setUseTexture(bool use_texture) {};
 
 private:
+    bool saveImage(std::vector<char>& destination);
     ofBuffer dxt_buffer_;
     ofTexture texture_;
     bool texture_needs_update_;
