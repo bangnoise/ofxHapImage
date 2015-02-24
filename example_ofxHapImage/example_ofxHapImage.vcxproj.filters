@@ -19,6 +19,15 @@
 		<ClCompile Include="..\..\..\addons\ofxHapImage\libs\Hap\src\hap.c">
 			<Filter>addons\ofxHapImage\libs\Hap\src</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\ImageMath.c">
+			<Filter>addons\ofxHapImage\libs\YCoCgDXT\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\YCoCg.c">
+			<Filter>addons\ofxHapImage\libs\YCoCgDXT\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\YCoCgDXT.cpp">
+			<Filter>addons\ofxHapImage\libs\YCoCgDXT\src</Filter>
+		</ClCompile>
 	</ItemGroup>
 	<ItemGroup>
 		<Filter Include="src">
@@ -54,6 +63,12 @@
 		<Filter Include="addons\ofxHapImage\libs\squish\include">
 			<UniqueIdentifier>{B2F7E5DB-BFE5-EFB1-D6D6-4A5B}</UniqueIdentifier>
 		</Filter>
+		<Filter Include="addons\ofxHapImage\libs\YCoCgDXT">
+			<UniqueIdentifier>{F5BE6C18-B65C-5BC1-55B9-E75F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxHapImage\libs\YCoCgDXT\src">
+			<UniqueIdentifier>{21C70E9D-CD2E-2A09-EC60-C0C9}</UniqueIdentifier>
+		</Filter>
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="src\ofApp.h">
@@ -82,6 +97,15 @@
 		</ClInclude>
 		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\squish\include\squish.h">
 			<Filter>addons\ofxHapImage\libs\squish\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\ImageMath.h">
+			<Filter>addons\ofxHapImage\libs\YCoCgDXT\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\YCoCg.h">
+			<Filter>addons\ofxHapImage\libs\YCoCgDXT\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\YCoCgDXT.h">
+			<Filter>addons\ofxHapImage\libs\YCoCgDXT\src</Filter>
 		</ClInclude>
 	</ItemGroup>
 	<ItemGroup>

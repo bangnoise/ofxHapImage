@@ -58,7 +58,7 @@
 			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
 			<DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\src;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\src;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 		</ClCompile>
 		<Link>
@@ -75,7 +75,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\src;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\src;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 		</ClCompile>
 		<Link>
@@ -94,6 +94,9 @@
 		<ClCompile Include="src\ofApp.cpp" />
 		<ClCompile Include="..\..\..\addons\ofxHapImage\src\ofxHapImage.cpp" />
 		<ClCompile Include="..\..\..\addons\ofxHapImage\libs\Hap\src\hap.c" />
+		<ClCompile Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\ImageMath.c" />
+		<ClCompile Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\YCoCg.c" />
+		<ClCompile Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\YCoCgDXT.cpp" />
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="src\ofApp.h" />
@@ -104,6 +107,9 @@
 		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\snappy\include\snappy-stubs-public.h" />
 		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\snappy\include\snappy.h" />
 		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\squish\include\squish.h" />
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\ImageMath.h" />
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\YCoCg.h" />
+		<ClInclude Include="..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src\YCoCgDXT.h" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
