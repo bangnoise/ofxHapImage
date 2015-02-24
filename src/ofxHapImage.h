@@ -8,10 +8,18 @@ public:
     enum ImageType {
         IMAGE_TYPE_HAP,
         IMAGE_TYPE_HAP_ALPHA,
-        IMAGE_TYPE_HAP_Q // TODO: Not supported yet
+        IMAGE_TYPE_HAP_Q
     };
 
+    /*
+     The file extension for Hap Images
+     */
     static std::string HapImageFileExtension();
+
+    /*
+     A textual description of an ImageType (eg "Hap")
+     */
+    static std::string imageTypeDescription(ImageType type);
 
     ofxHapImage();
     virtual ~ofxHapImage();
@@ -68,6 +76,11 @@ public:
 
     ofTexture& getTextureReference();
 
+    /*
+     When using the texture for IMAGE_TYPE_HAP_Q, drawing requires the use of this shader
+     */
+    ofShader& getShaderReference();
+
     // This is ignored, we always use a texture
     void setUseTexture(bool use_texture) {};
 
@@ -75,6 +88,7 @@ private:
     bool saveImage(std::vector<char>& destination);
     ofBuffer dxt_buffer_;
     ofTexture texture_;
+    ofShader shader_;
     bool texture_needs_update_;
     ofxHapImage::ImageType type_;
     unsigned int width_;

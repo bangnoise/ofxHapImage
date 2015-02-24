@@ -1,6 +1,8 @@
 #include "ofxHapImage.h"
 #include <hap.h>
 #include <squish.h>
+#include <YCoCg.h>
+#include <YCoCgDXT.h>
 #if defined(__APPLE__)
 #else
 #include <ppl.h>
@@ -31,11 +33,45 @@ namespace ofxHapImagePrivate {
             n = (n + 3) & ~3;
         return n;
     }
+
+    const string YCoCgVertexShader = "void main(void)\
+    {\
+    gl_Position = ftransform();\
+    gl_TexCoord[0] = gl_MultiTexCoord0;\
+    }";
+
+    const string YCoCgFragmentShader = "uniform sampler2D cocgsy_src;\
+    const vec4 offsets = vec4(-0.50196078431373, -0.50196078431373, 0.0, 0.0);\
+    void main()\
+    {\
+    vec4 CoCgSY = texture2D(cocgsy_src, gl_TexCoord[0].xy);\
+    CoCgSY += offsets;\
+    float scale = ( CoCgSY.z * ( 255.0 / 8.0 ) ) + 1.0;\
+    float Co = CoCgSY.x / scale;\
+    float Cg = CoCgSY.y / scale;\
+    float Y = CoCgSY.w;\
+    vec4 rgba = vec4(Y + Co - Cg, Y + Cg, Y - Co - Cg, 1.0);\
+    gl_FragColor = rgba;\
+    }";
 }
 
 std::string ofxHapImage::HapImageFileExtension()
 {
     return "hpz";
+}
+
+std::string ofxHapImage::imageTypeDescription(ofxHapImage::ImageType type)
+{
+    switch (type) {
+        case IMAGE_TYPE_HAP:
+            return "Hap";
+        case IMAGE_TYPE_HAP_ALPHA:
+            return "Hap Alpha";
+        case IMAGE_TYPE_HAP_Q:
+            return "Hap Q";
+        default:
+            return "Unknown";
+    }
 }
 
 ofxHapImage::ofxHapImage() :
@@ -162,6 +198,8 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
         case IMAGE_TYPE_HAP_ALPHA:
             squish_flags |= squish::kDxt5;
             break;
+        case IMAGE_TYPE_HAP_Q:
+            break;
         default:
             result = false;
             break;
@@ -188,11 +226,33 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
 #else
         concurrency::parallel_for((unsigned int)0, divisions, [&](unsigned int index) {
 #endif
-            squish::CompressImage(&pixels[pixels.getPixelIndex(0, index * kofxHapImageMTChunkHeight)],
+            int chunk_height = MIN(kofxHapImageMTChunkHeight, image.getHeight() - (kofxHapImageMTChunkHeight * index));
+            if (type == IMAGE_TYPE_HAP_Q)
+            {
+                // First convert RGBA to YCoCg
+                std::vector<uint8_t> ycocg(chunk_height * image.getWidth() * 4);
+                ConvertRGB_ToCoCg_Y8888(static_cast<const uint8_t *>(&pixels[pixels.getPixelIndex(0, index * kofxHapImageMTChunkHeight)]),
+                                        &ycocg[0],
+                                        image.getWidth(),
+                                        chunk_height,
+                                        image.getWidth() * 4,
+                                        image.getWidth() * 4,
+                                        0);
+                // Convert YCoCg to YCoCgDXT
+                CompressYCoCgDXT5(static_cast<byte *>(&ycocg[0]),
+                                  reinterpret_cast<byte *>(dxt_buffer_.getBinaryBuffer() + (dxt_bytes_per_division * index)),
                                   image.getWidth(),
-                                  MIN(kofxHapImageMTChunkHeight, image.getHeight() - (kofxHapImageMTChunkHeight * index)),
-                                  dxt_buffer_.getBinaryBuffer() + (dxt_bytes_per_division * index),
-                                  squish_flags);
+                                  chunk_height,
+                                  image.getWidth() * 4);
+            }
+            else
+            {
+                squish::CompressImage(&pixels[pixels.getPixelIndex(0, index * kofxHapImageMTChunkHeight)],
+                                      image.getWidth(),
+                                      chunk_height,
+                                      dxt_buffer_.getBinaryBuffer() + (dxt_bytes_per_division * index),
+                                      squish_flags);
+            }
         });
 
         type_ = type;
@@ -365,6 +425,23 @@ ofTexture& ofxHapImage::getTextureReference()
     return texture_;
 }
 
+ofShader& ofxHapImage::getShaderReference()
+{
+    if (!shader_.isLoaded())
+    {
+        bool success = shader_.setupShaderFromSource(GL_VERTEX_SHADER, ofxHapImagePrivate::YCoCgVertexShader);
+        if (success)
+        {
+            success = shader_.setupShaderFromSource(GL_FRAGMENT_SHADER, ofxHapImagePrivate::YCoCgFragmentShader);
+        }
+        if (success)
+        {
+            success = shader_.linkProgram();
+        }
+    }
+    return shader_;
+}
+
 void ofxHapImage::draw(float x, float y)
 {
     draw(x, y, getWidth(), getHeight());
@@ -374,6 +451,14 @@ void ofxHapImage::draw(float x, float y, float w, float h)
 {
     if (getTextureReference().isAllocated())
     {
+        if (type_ == IMAGE_TYPE_HAP_Q)
+        {
+            getShaderReference().begin();
+        }
         getTextureReference().draw(x, y, w, h);
+        if (type_ == IMAGE_TYPE_HAP_Q)
+        {
+            getShaderReference().end();
+        }
     }
 }

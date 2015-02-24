@@ -20,6 +20,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+    ofxHapImage::ImageType savedImageType();
     std::vector<ofxHapImage> images;
-    ofxHapImage::ImageType save_type;
+    ofParameterGroup parameters;
 };

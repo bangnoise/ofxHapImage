@@ -9,6 +9,148 @@
 		<string>46</string>
 		<key>objects</key>
 		<dict>
+			<key>B12E3BF2F43B0BF3BA0AC235</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>YCoCgDXT.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxHapImage/libs/YCoCgDXT/src/YCoCgDXT.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>3CBC587175F3729357F3D777</key>
+			<dict>
+				<key>fileRef</key>
+				<string>19174FBD3CCE9EB637D7B7CF</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>19174FBD3CCE9EB637D7B7CF</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>YCoCgDXT.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxHapImage/libs/YCoCgDXT/src/YCoCgDXT.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>715CEF1304CA91F04FBB7176</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>YCoCg.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxHapImage/libs/YCoCgDXT/src/YCoCg.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>72B491749BEF5E9BE30E7D40</key>
+			<dict>
+				<key>fileRef</key>
+				<string>F2B3CA28994816A12E62CAA3</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>F2B3CA28994816A12E62CAA3</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.c</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>YCoCg.c</string>
+				<key>path</key>
+				<string>../../../addons/ofxHapImage/libs/YCoCgDXT/src/YCoCg.c</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>7FAE31611644E192EAE51228</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ImageMath.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxHapImage/libs/YCoCgDXT/src/ImageMath.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>EA62F73A62543A8FFE761039</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>1B17513730E98F50B6008CB1</string>
+					<string>7FAE31611644E192EAE51228</string>
+					<string>F2B3CA28994816A12E62CAA3</string>
+					<string>715CEF1304CA91F04FBB7176</string>
+					<string>19174FBD3CCE9EB637D7B7CF</string>
+					<string>B12E3BF2F43B0BF3BA0AC235</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>src</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>819151A4573FEE2946EC3378</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>EA62F73A62543A8FFE761039</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>YCoCgDXT</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>C684590048438C8AC7B72633</key>
+			<dict>
+				<key>fileRef</key>
+				<string>1B17513730E98F50B6008CB1</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>1B17513730E98F50B6008CB1</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.c</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ImageMath.c</string>
+				<key>path</key>
+				<string>../../../addons/ofxHapImage/libs/YCoCgDXT/src/ImageMath.c</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
 			<key>F883AABEF87F9A8828CBD6F3</key>
 			<dict>
 				<key>children</key>
@@ -188,6 +330,7 @@
 					<string>7F2E2B61EF5393829CAF3BB1</string>
 					<string>3A3EA444CD4586DEC4479D9D</string>
 					<string>67EAEF5328D8677F9737BEE5</string>
+					<string>819151A4573FEE2946EC3378</string>
 				</array>
 				<key>isa</key>
 				<string>PBXGroup</string>
@@ -683,6 +826,8 @@
 						<string>../../../addons/ofxHapImage/libs</string>
 						<string>../../../addons/ofxHapImage/libs/Hap</string>
 						<string>../../../addons/ofxHapImage/libs/Hap/src</string>
+						<string>../../../addons/ofxHapImage/libs/YCoCgDXT</string>
+						<string>../../../addons/ofxHapImage/libs/YCoCgDXT/src</string>
 						<string>../../../addons/ofxHapImage/libs/snappy</string>
 						<string>../../../addons/ofxHapImage/libs/snappy/include</string>
 						<string>../../../addons/ofxHapImage/libs/snappy/lib</string>
@@ -760,6 +905,8 @@
 						<string>../../../addons/ofxHapImage/libs</string>
 						<string>../../../addons/ofxHapImage/libs/Hap</string>
 						<string>../../../addons/ofxHapImage/libs/Hap/src</string>
+						<string>../../../addons/ofxHapImage/libs/YCoCgDXT</string>
+						<string>../../../addons/ofxHapImage/libs/YCoCgDXT/src</string>
 						<string>../../../addons/ofxHapImage/libs/snappy</string>
 						<string>../../../addons/ofxHapImage/libs/snappy/include</string>
 						<string>../../../addons/ofxHapImage/libs/snappy/lib</string>
@@ -831,6 +978,9 @@
 					<string>E4B69E210A3A1BDC003C02F2</string>
 					<string>3148B5F6EC92C6A602E01809</string>
 					<string>D8E27E29F11EDB955EA1C308</string>
+					<string>C684590048438C8AC7B72633</string>
+					<string>72B491749BEF5E9BE30E7D40</string>
+					<string>3CBC587175F3729357F3D777</string>
 				</array>
 				<key>isa</key>
 				<string>PBXSourcesBuildPhase</string>
