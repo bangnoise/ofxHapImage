@@ -187,7 +187,7 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
         image.setImageType(OF_IMAGE_COLOR_ALPHA);
     }
     // Initial calculation gives largest size, for Hap Alpha and Hap Q
-    size_t dxt_size = ofxHapImagePrivate::roundUpToMultipleOf4(image.getWidth() * ofxHapImagePrivate::roundUpToMultipleOf4(image.getHeight()));
+    size_t dxt_size = ofxHapImagePrivate::roundUpToMultipleOf4(image.getWidth()) * ofxHapImagePrivate::roundUpToMultipleOf4(image.getHeight());
     int squish_flags = squish::kColourClusterFit;
     bool result = true;
     switch (type) {
@@ -411,8 +411,8 @@ ofTexture& ofxHapImage::getTextureReference()
                                   0,
                                   0,
                                   0,
-                                  rounded_width,
-                                  rounded_height,
+                                  width_,
+                                  height_,
                                   internal_type,
                                   dxt_buffer_.size(),
                                   dxt_buffer_.getBinaryBuffer());
