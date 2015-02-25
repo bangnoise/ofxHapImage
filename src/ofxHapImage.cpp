@@ -3,8 +3,7 @@
 #include <squish.h>
 #include <YCoCg.h>
 #include <YCoCgDXT.h>
-#if defined(__APPLE__)
-#else
+#if defined(TARGET_WIN32)
 #include <ppl.h>
 #endif
 
@@ -16,14 +15,19 @@
 namespace ofxHapImagePrivate {
     static void decodeCallback(HapDecodeWorkFunction function, void *p, unsigned int count, void *info)
     {
-#if defined(__APPLE__)
+#if defined(TARGET_OSX)
         dispatch_apply(count, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             function(p, (unsigned int)index);
         });
-#else
+#elif defined(TARGET_WIN32)
         concurrency::parallel_for((unsigned int)0, count, [&](unsigned int i) {
             function(p, i);
         });
+#else
+        // TODO: multi-threaded on Linux
+        for (unsigned int i = 0; i < count; i++) {
+            function(p, i);
+        }
 #endif
     }
 
@@ -75,7 +79,7 @@ std::string ofxHapImage::imageTypeDescription(ofxHapImage::ImageType type)
 }
 
 ofxHapImage::ofxHapImage() :
-texture_needs_update_(true), width_(0), height_(0), type_(IMAGE_TYPE_HAP)
+texture_needs_update_(true), type_(IMAGE_TYPE_HAP), width_(0), height_(0)
 {
 
 }
@@ -221,10 +225,12 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
         {
             dxt_bytes_per_division /= 2;
         }
-#if defined(__APPLE__)
+#if defined(TARGET_OSX)
         dispatch_apply(divisions, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
-#else
+#elif defined(TARGET_WIN32)
         concurrency::parallel_for((unsigned int)0, divisions, [&](unsigned int index) {
+#else
+        for (unsigned int index = 0; index < divisions; index++) {
 #endif
             int chunk_height = MIN(kofxHapImageMTChunkHeight, image.getHeight() - (kofxHapImageMTChunkHeight * index));
             if (type == IMAGE_TYPE_HAP_Q)
@@ -253,8 +259,11 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
                                       dxt_buffer_.getBinaryBuffer() + (dxt_bytes_per_division * index),
                                       squish_flags);
             }
+#if defined(TARGET_LINUX)
+        }
+#else
         });
-
+#endif
         type_ = type;
         width_ = image.getWidth();
         height_ = image.getHeight();
@@ -414,7 +423,7 @@ ofTexture& ofxHapImage::getTextureReference()
                                   dxt_buffer_.size(),
                                   dxt_buffer_.getBinaryBuffer());
         texture_.unbind();
-        
+
         glPopClientAttrib();
 
         texture_needs_update_ = false;

@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="example_ofxHapImage" />
+		<Option makefile_is_custom="1" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Option virtualFolders="addons/;src/;build config/;" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/$(PROJECT_NAME)_debug" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin" />
+				<Option object_output="obj/Debug/" />
+				<Option external_deps="../../../libs/openFrameworksCompiled/lib/linux64/libopenFrameworksDebug.a;" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+			</Target>
+			<Target title="Release">
+				<Option output="bin/$(PROJECT_NAME)" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin" />
+				<Option object_output="obj/Release/" />
+				<Option external_deps="../../../libs/openFrameworksCompiled/lib/linux64/libopenFrameworks.a;" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+			</Target>
+		</Build>
+		<Unit filename="config.make">
+			<Option virtualFolder="build config" />
+		</Unit>
+		<Unit filename="src/main.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/ofApp.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/ofApp.h">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+		<Unit filename="../../../addons/ofxHapImage/src/ofxHapImage.h">
+			<Option virtualFolder="addons/ofxHapImage/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/src/ofxHapImage.cpp">
+			<Option virtualFolder="addons/ofxHapImage/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/YCoCgDXT/src/YCoCg.h">
+			<Option virtualFolder="addons/ofxHapImage/libs/YCoCgDXT/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/YCoCgDXT/src/ImageMath.h">
+			<Option virtualFolder="addons/ofxHapImage/libs/YCoCgDXT/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/YCoCgDXT/src/YCoCgDXT.cpp">
+			<Option virtualFolder="addons/ofxHapImage/libs/YCoCgDXT/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/YCoCgDXT/src/ImageMath.c">
+			<Option virtualFolder="addons/ofxHapImage/libs/YCoCgDXT/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/YCoCgDXT/src/YCoCgDXT.h">
+			<Option virtualFolder="addons/ofxHapImage/libs/YCoCgDXT/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/YCoCgDXT/src/YCoCg.c">
+			<Option virtualFolder="addons/ofxHapImage/libs/YCoCgDXT/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/squish/include/squish.h">
+			<Option virtualFolder="addons/ofxHapImage/libs/squish/include" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/Hap/src/hap.c">
+			<Option virtualFolder="addons/ofxHapImage/libs/Hap/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/Hap/src/hap.h">
+			<Option virtualFolder="addons/ofxHapImage/libs/Hap/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/snappy/include/snappy-sinksource.h">
+			<Option virtualFolder="addons/ofxHapImage/libs/snappy/include" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/snappy/include/snappy-stubs-public.h">
+			<Option virtualFolder="addons/ofxHapImage/libs/snappy/include" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/snappy/include/snappy.h">
+			<Option virtualFolder="addons/ofxHapImage/libs/snappy/include" />
+		</Unit>
+		<Unit filename="../../../addons/ofxHapImage/libs/snappy/include/snappy-c.h">
+			<Option virtualFolder="addons/ofxHapImage/libs/snappy/include" />
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
