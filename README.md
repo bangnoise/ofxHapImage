@@ -11,7 +11,7 @@ License
 -------
 ofxHapImage was written by Tom Butterworth, February 2015. It is released under a [FreeBSD License](LICENSE.md).
 
-This addon uses libsquish by Simon Brown, and Snappy by Google Inc. Their licenses are in [LICENSE.md](LICENSE.md).
+This addon uses libsquish by Simon Brown, Snappy by Google Inc and YCoCg DXT code by J.M.P. van Waveren / id Software, Inc. and Chris Sidhall / Electronic Arts. Their licenses are in [LICENSE.md](LICENSE.md).
 
 Installation
 ------------
