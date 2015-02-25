@@ -376,16 +376,13 @@ ofTexture& ofxHapImage::getTextureReference()
          */
         GLint internal_type = (type_ == IMAGE_TYPE_HAP ? GL_COMPRESSED_RGB_S3TC_DXT1_EXT : GL_COMPRESSED_RGBA_S3TC_DXT5_EXT);
 
-        unsigned int rounded_width = ofxHapImagePrivate::roundUpToMultipleOf4(width_);
-        unsigned int rounded_height = ofxHapImagePrivate::roundUpToMultipleOf4(height_);
-
-        if (texture_.getWidth() != rounded_width
-            || texture_.getHeight() != rounded_height
+        if (texture_.getWidth() != width_
+            || texture_.getHeight() != height_
             || texture_.getTextureData().glTypeInternal != internal_type)
         {
             ofTextureData texData;
-            texData.width = rounded_width;
-            texData.height = rounded_height;
+            texData.width = width_;
+            texData.height = height_;
             texData.textureTarget = GL_TEXTURE_2D;
             texData.glTypeInternal = internal_type;
             texture_.allocate(texData, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV);
