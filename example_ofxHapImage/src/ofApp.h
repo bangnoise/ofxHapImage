@@ -21,6 +21,7 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
     ofxHapImage::ImageType savedImageType();
+    void fileDropped(const ofFile& file, ofxHapImage::ImageType save_type);
     std::vector<ofxHapImage> images;
     ofParameterGroup parameters;
 };

@@ -109,18 +109,8 @@ void ofApp::dragEvent(ofDragInfo dragInfo) {
     images.clear();
     ofxHapImage::ImageType save_type = savedImageType();
     for (std::vector<std::string>::const_iterator it = dragInfo.files.begin(); it < dragInfo.files.end(); ++ it) {
-        if (ofFilePath::getFileExt(*it) == ofxHapImage::HapImageFileExtension())
-        {
-            images.push_back(ofxHapImage(*it));
-        }
-        else
-        {
-            ofImage original(*it);
-            ofxHapImage image(original, save_type);
-            std::string name = ofFilePath::removeExt(*it) + "." + ofxHapImage::HapImageFileExtension();
-            image.saveImage(name);
-            images.push_back(image);
-        }
+        ofFile file(*it, ofFile::Reference);
+        fileDropped(file, save_type);
     }
     if (dragInfo.files.size() > 0)
     {
@@ -149,3 +139,26 @@ ofxHapImage::ImageType ofApp::savedImageType()
     }
 }
 
+void ofApp::fileDropped(const ofFile& file, ofxHapImage::ImageType save_type)
+{
+    if (file.isDirectory())
+    {
+        ofDirectory directory(file.getAbsolutePath());
+        directory.listDir();
+        for (int i = 0; i < directory.size(); i++) {
+            fileDropped(directory[i], save_type);
+        }
+    }
+    else if (file.getExtension() == ofxHapImage::HapImageFileExtension())
+    {
+        images.push_back(ofxHapImage(file));
+    }
+    else
+    {
+        ofImage original(file);
+        ofxHapImage image(original, save_type);
+        std::string name = ofFilePath::removeExt(file.getAbsolutePath()) + "." + ofxHapImage::HapImageFileExtension();
+        image.saveImage(name);
+        images.push_back(image);
+    }
+}
