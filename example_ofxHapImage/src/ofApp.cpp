@@ -154,9 +154,23 @@ void ofApp::fileDropped(const ofFile& file, ofxHapImage::ImageType save_type)
     }
     else
     {
-        ofImage original(file);
-        image.loadImage(original, save_type);
-        std::string name = ofFilePath::removeExt(file.getAbsolutePath()) + "." + ofxHapImage::HapImageFileExtension();
-        image.saveImage(name);
+        std::string save_name = ofFilePath::removeExt(file.getAbsolutePath()) + "." + ofxHapImage::HapImageFileExtension();
+        ofFile existing_save(save_name, ofFile::Reference);
+        if (existing_save.exists())
+        {
+            /*
+             Be lazy and use a previous save if one exists
+             */
+            image.loadImage(existing_save);
+        }
+        else
+        {
+            /*
+             Convert the image to Hap and save it
+             */
+            ofImage original(file);
+            image.loadImage(original, save_type);
+            image.saveImage(save_name);
+        }
     }
 }
