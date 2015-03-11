@@ -144,7 +144,7 @@ void ofApp::fileDropped(const ofFile& file, ofxHapImage::ImageType save_type)
     {
         ofDirectory directory(file.getAbsolutePath());
         directory.listDir();
-        for (int i = 0; i < directory.size(); i++) {
+        for (unsigned int i = 0; i < directory.size(); i++) {
             fileDropped(directory[i], save_type);
         }
     }
