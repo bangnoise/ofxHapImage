@@ -53,6 +53,11 @@ public:
     bool loadImage(ofImage& image, ofxHapImage::ImageType type);
 
     /*
+     Is loaded
+     */
+    bool isLoaded() const;
+
+    /*
      Save a Hap image
      */
     void saveImage(const std::string& fileName);

@@ -468,3 +468,8 @@ void ofxHapImage::draw(float x, float y, float w, float h)
         }
     }
 }
+
+bool ofxHapImage::isLoaded() const
+{
+    return dxt_buffer_.size() > 0;
+}

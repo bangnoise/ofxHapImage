@@ -22,16 +22,16 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    if (images.size() > 0)
+    if (image.isLoaded())
     {
         ofSetColor(255, 255, 255);
-        ofRectangle image_rect(0, 0, images[0].getWidth(), images[0].getHeight());
+        ofRectangle image_rect(0, 0, image.getWidth(), image.getHeight());
         ofRectangle drawable = ofGetWindowRect();
         drawable.y += 30;
         drawable.height -= 30;
         image_rect.scaleTo(drawable);
 
-        images[0].draw(image_rect.x, image_rect.y, image_rect.width, image_rect.height);
+        image.draw(image_rect.x, image_rect.y, image_rect.width, image_rect.height);
     } else {
         ofDrawBitmapString("Drag images to the window to create Hap versions.", 10, 40);
         ofDrawBitmapString("Drag Hap images to the window to view them.", 10, 60);
@@ -106,7 +106,6 @@ void ofApp::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo) {
-    images.clear();
     ofxHapImage::ImageType save_type = savedImageType();
     for (std::vector<std::string>::const_iterator it = dragInfo.files.begin(); it < dragInfo.files.end(); ++ it) {
         ofFile file(*it, ofFile::Reference);
@@ -151,14 +150,13 @@ void ofApp::fileDropped(const ofFile& file, ofxHapImage::ImageType save_type)
     }
     else if (file.getExtension() == ofxHapImage::HapImageFileExtension())
     {
-        images.push_back(ofxHapImage(file));
+        image.loadImage(file);
     }
     else
     {
         ofImage original(file);
-        ofxHapImage image(original, save_type);
+        image.loadImage(original, save_type);
         std::string name = ofFilePath::removeExt(file.getAbsolutePath()) + "." + ofxHapImage::HapImageFileExtension();
         image.saveImage(name);
-        images.push_back(image);
     }
 }
