@@ -23,4 +23,4 @@ None.
 
 Compatibility
 ------------
-OF 0.8.4.
+OF 0.8.4 to 0.9.0. Branches exist for each release. Use the appropriate branch for the OF version you are using.
