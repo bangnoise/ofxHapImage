@@ -137,7 +137,7 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
     unsigned int dimensions_valid;
     unsigned int format;
 
-    unsigned int result = HapGetFrameDetails(buffer.getBinaryBuffer(), buffer.size(), &width, &height, &dimensions_valid, &format);
+    unsigned int result = HapGetFrameDetails(buffer.getData(), buffer.size(), &width, &height, &dimensions_valid, &format);
     if (result == HapResult_No_Error && dimensions_valid != 0)
     {
         switch (format) {
@@ -164,9 +164,9 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
         }
         if (dxt_buffer_.size() != decompressed_size)
         {
-            dxt_buffer_.allocate(decompressed_size + 1); // TODO: bug in ofBuffer adds 1 to every size except in allocate()
+            dxt_buffer_.allocate(decompressed_size);
         }
-        result = HapDecode(buffer.getBinaryBuffer(), buffer.size(), ofxHapImagePrivate::decodeCallback, NULL, dxt_buffer_.getBinaryBuffer(), dxt_buffer_.size(), &output_buffer_bytes_used, &format);
+        result = HapDecode(buffer.getData(), buffer.size(), ofxHapImagePrivate::decodeCallback, NULL, dxt_buffer_.getData(), dxt_buffer_.size(), &output_buffer_bytes_used, &format);
     }
     if (result == HapResult_No_Error)
     {
@@ -184,7 +184,7 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
 
 bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
 {
-    ofImageType input_type = image.getPixelsRef().getImageType();
+    ofImageType input_type = image.getPixels().getImageType();
     if (input_type != OF_IMAGE_COLOR_ALPHA)
     {
         image = ofImage(image); // TODO: most efficient up/down-sample mechanism
@@ -212,14 +212,14 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
     {
         if (dxt_buffer_.size() != dxt_size)
         {
-            dxt_buffer_.allocate(dxt_size + 1); // TODO: bug in ofBuffer means it adds 1 to every size-related action except here
+            dxt_buffer_.allocate(dxt_size);
         }
         unsigned int divisions = image.getHeight() / kofxHapImageMTChunkHeight;
         if ((int)image.getHeight() % kofxHapImageMTChunkHeight != 0)
         {
             divisions++;
         }
-        ofPixels pixels = image.getPixelsRef();
+        ofPixels pixels = image.getPixels();
         size_t dxt_bytes_per_division = ofxHapImagePrivate::roundUpToMultipleOf4(image.getWidth()) * kofxHapImageMTChunkHeight;
         if (type == IMAGE_TYPE_HAP)
         {
@@ -246,7 +246,7 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
                                         0);
                 // Convert YCoCg to YCoCgDXT
                 CompressYCoCgDXT5(static_cast<byte *>(&ycocg[0]),
-                                  reinterpret_cast<byte *>(dxt_buffer_.getBinaryBuffer() + (dxt_bytes_per_division * index)),
+                                  reinterpret_cast<byte *>(dxt_buffer_.getData() + (dxt_bytes_per_division * index)),
                                   image.getWidth(),
                                   chunk_height,
                                   image.getWidth() * 4);
@@ -256,7 +256,7 @@ bool ofxHapImage::loadImage(ofImage &image, ofxHapImage::ImageType type)
                 squish::CompressImage(&pixels[pixels.getPixelIndex(0, index * kofxHapImageMTChunkHeight)],
                                       image.getWidth(),
                                       chunk_height,
-                                      dxt_buffer_.getBinaryBuffer() + (dxt_bytes_per_division * index),
+                                      dxt_buffer_.getData() + (dxt_bytes_per_division * index),
                                       squish_flags);
             }
 #if defined(TARGET_LINUX)
@@ -340,7 +340,7 @@ bool ofxHapImage::saveImage(std::vector<char>& destination)
     }
     destination.resize(HapMaxEncodedLength(dxt_buffer_.size(), format, kofxHapImageEncodeChunkCount));
     unsigned long buffer_used = 0;
-    unsigned int result = HapEncode(dxt_buffer_.getBinaryBuffer(),
+    unsigned int result = HapEncode(dxt_buffer_.getData(),
                                     dxt_buffer_.size(),
                                     format,
                                     width_, height_,
@@ -361,12 +361,12 @@ bool ofxHapImage::saveImage(std::vector<char>& destination)
     }
 }
 
-float ofxHapImage::getWidth()
+float ofxHapImage::getWidth() const
 {
     return width_;
 }
 
-float ofxHapImage::getHeight()
+float ofxHapImage::getHeight() const
 {
     return height_;
 }
@@ -376,7 +376,19 @@ ofxHapImage::ImageType ofxHapImage::getImageType()
     return type_;
 }
 
-ofTexture& ofxHapImage::getTextureReference()
+ofTexture& ofxHapImage::getTexture()
+{
+    prepareTexture();
+    return texture_;
+}
+
+const ofTexture& ofxHapImage::getTexture() const
+{
+    prepareTexture();
+    return texture_;
+}
+
+void ofxHapImage::prepareTexture() const
 {
     if (texture_needs_update_ && dxt_buffer_.size() > 0 && width_ > 0 && height_ > 0)
     {
@@ -387,13 +399,13 @@ ofTexture& ofxHapImage::getTextureReference()
 
         if (texture_.getWidth() != width_
             || texture_.getHeight() != height_
-            || texture_.getTextureData().glTypeInternal != internal_type)
+            || texture_.getTextureData().glInternalFormat != internal_type)
         {
             ofTextureData texData;
             texData.width = width_;
             texData.height = height_;
             texData.textureTarget = GL_TEXTURE_2D;
-            texData.glTypeInternal = internal_type;
+            texData.glInternalFormat = internal_type;
             texture_.allocate(texData, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV);
         }
 
@@ -409,7 +421,7 @@ ofTexture& ofxHapImage::getTextureReference()
 
 
 #if defined(TARGET_OSX)
-        glTextureRangeAPPLE(GL_TEXTURE_2D, dxt_buffer_.size(), dxt_buffer_.getBinaryBuffer());
+        glTextureRangeAPPLE(GL_TEXTURE_2D, dxt_buffer_.size(), const_cast<char *>(dxt_buffer_.getData()));
         glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
 #endif
 
@@ -421,17 +433,16 @@ ofTexture& ofxHapImage::getTextureReference()
                                   height_,
                                   internal_type,
                                   dxt_buffer_.size(),
-                                  dxt_buffer_.getBinaryBuffer());
+                                  dxt_buffer_.getData());
         texture_.unbind();
 
         glPopClientAttrib();
 
         texture_needs_update_ = false;
     }
-    return texture_;
 }
 
-ofShader& ofxHapImage::getShaderReference()
+ofShader& ofxHapImage::getShader() const
 {
     if (!shader_.isLoaded())
     {
@@ -448,23 +459,23 @@ ofShader& ofxHapImage::getShaderReference()
     return shader_;
 }
 
-void ofxHapImage::draw(float x, float y)
+void ofxHapImage::draw(float x, float y) const
 {
     draw(x, y, getWidth(), getHeight());
 }
 
-void ofxHapImage::draw(float x, float y, float w, float h)
+void ofxHapImage::draw(float x, float y, float w, float h) const
 {
-    if (getTextureReference().isAllocated())
+    if (getTexture().isAllocated())
     {
         if (type_ == IMAGE_TYPE_HAP_Q)
         {
-            getShaderReference().begin();
+            getShader().begin();
         }
-        getTextureReference().draw(x, y, w, h);
+        getTexture().draw(x, y, w, h);
         if (type_ == IMAGE_TYPE_HAP_Q)
         {
-            getShaderReference().end();
+            getShader().end();
         }
     }
 }

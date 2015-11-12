@@ -45,17 +45,18 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     bool changed = false;
+    ofParameter<std::string>& param = parameters.getString("save_type");
     switch (key) {
         case '1':
-            parameters["save_type"].cast<std::string>() = "hap";
+            param.set("hap");
             changed = true;
             break;
         case '2':
-            parameters["save_type"].cast<std::string>() = "hap-alpha";
+            param.set("hap-alpha");
             changed = true;
             break;
         case '3':
-            parameters["save_type"].cast<std::string>() = "hap-q";
+            param.set("hap-q");
             changed = true;
             break;
         default:

@@ -69,32 +69,37 @@ public:
     /*
      Drawing
      */
-    void draw(float x, float y);
+    virtual void draw(float x, float y) const override;
 
-    void draw(float x, float y, float w, float h);
+    virtual void draw(float x, float y, float w, float h) const override;
 
-    float getHeight();
+    virtual float getHeight() const override;
     
-    float getWidth();
+    virtual float getWidth() const override;
 
     ofxHapImage::ImageType getImageType();
 
-    ofTexture& getTextureReference();
+    virtual ofTexture& getTexture() override;
+
+    virtual const ofTexture & getTexture() const override;
 
     /*
      When using the texture for IMAGE_TYPE_HAP_Q, drawing requires the use of this shader
      */
-    ofShader& getShaderReference();
+    ofShader& getShader() const;
 
     // This is ignored, we always use a texture
-    void setUseTexture(bool use_texture) {};
+    virtual void setUseTexture(bool use_texture) override {};
+
+    virtual bool isUsingTexture() const override { return true; };
 
 private:
     bool saveImage(std::vector<char>& destination);
+    void prepareTexture() const;
     ofBuffer dxt_buffer_;
-    ofTexture texture_;
-    ofShader shader_;
-    bool texture_needs_update_;
+    mutable ofTexture texture_;
+    mutable ofShader shader_;
+    mutable bool texture_needs_update_;
     ofxHapImage::ImageType type_;
     unsigned int width_;
     unsigned int height_;
