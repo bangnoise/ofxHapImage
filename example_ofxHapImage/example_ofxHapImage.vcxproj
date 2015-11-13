@@ -95,15 +95,15 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64;..\..\..\addons\ofxHapImage\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Debug;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Release;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Debug;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Release;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Release;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Release;..\..\..\addons\ofxHapImage\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 		</ClCompile>
 		<Link>
 			<GenerateDebugInformation>true</GenerateDebugInformation>
 			<SubSystem>Console</SubSystem>
 			<RandomizedBaseAddress>false</RandomizedBaseAddress>
-			<AdditionalDependencies>%(AdditionalDependencies);snappy.lib;snappyd.lib;squish.lib;squishd.lib</AdditionalDependencies>
-			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32</AdditionalLibraryDirectories>
+			<AdditionalDependencies>%(AdditionalDependencies);snappyd.lib;squishd.lib</AdditionalDependencies>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Debug</AdditionalLibraryDirectories>
 		</Link>
 		<PostBuildEvent />
 	</ItemDefinitionGroup>
@@ -114,7 +114,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64;..\..\..\addons\ofxHapImage\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Debug;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Release;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Debug;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Release;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Release;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Release;..\..\..\addons\ofxHapImage\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 			<MultiProcessorCompilation>true</MultiProcessorCompilation>
 		</ClCompile>
@@ -122,8 +122,8 @@
 			<GenerateDebugInformation>true</GenerateDebugInformation>
 			<SubSystem>Console</SubSystem>
 			<RandomizedBaseAddress>false</RandomizedBaseAddress>
-			<AdditionalDependencies>%(AdditionalDependencies);snappy.lib;snappyd.lib;squish.lib;squishd.lib</AdditionalDependencies>
-			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64</AdditionalLibraryDirectories>
+			<AdditionalDependencies>%(AdditionalDependencies);snappyd.lib;squishd.lib</AdditionalDependencies>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Debug</AdditionalLibraryDirectories>
 		</Link>
 		<PostBuildEvent />
 	</ItemDefinitionGroup>
@@ -133,7 +133,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64;..\..\..\addons\ofxHapImage\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Debug;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Release;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Debug;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Release;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Release;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Release;..\..\..\addons\ofxHapImage\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 			<MultiProcessorCompilation>true</MultiProcessorCompilation>
 		</ClCompile>
@@ -144,8 +144,8 @@
 			<OptimizeReferences>true</OptimizeReferences>
 			<EnableCOMDATFolding>true</EnableCOMDATFolding>
 			<RandomizedBaseAddress>false</RandomizedBaseAddress>
-			<AdditionalDependencies>%(AdditionalDependencies);snappy.lib;snappyd.lib;squish.lib;squishd.lib</AdditionalDependencies>
-			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32</AdditionalLibraryDirectories>
+			<AdditionalDependencies>%(AdditionalDependencies);snappy.lib;squish.lib</AdditionalDependencies>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Release;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Release</AdditionalLibraryDirectories>
 		</Link>
 		<PostBuildEvent />
 	</ItemDefinitionGroup>
@@ -155,7 +155,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64;..\..\..\addons\ofxHapImage\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxHapImage\libs;..\..\..\addons\ofxHapImage\libs\Hap;..\..\..\addons\ofxHapImage\libs\Hap\src;..\..\..\addons\ofxHapImage\libs\YCoCgDXT;..\..\..\addons\ofxHapImage\libs\YCoCgDXT\src;..\..\..\addons\ofxHapImage\libs\snappy;..\..\..\addons\ofxHapImage\libs\snappy\include;..\..\..\addons\ofxHapImage\libs\snappy\lib;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Debug;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\Win32\Release;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Debug;..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Release;..\..\..\addons\ofxHapImage\libs\squish;..\..\..\addons\ofxHapImage\libs\squish\include;..\..\..\addons\ofxHapImage\libs\squish\lib;..\..\..\addons\ofxHapImage\libs\squish\lib\vs;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\Win32\Release;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Debug;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Release;..\..\..\addons\ofxHapImage\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 		</ClCompile>
 		<Link>
@@ -165,8 +165,8 @@
 			<OptimizeReferences>true</OptimizeReferences>
 			<EnableCOMDATFolding>true</EnableCOMDATFolding>
 			<RandomizedBaseAddress>false</RandomizedBaseAddress>
-			<AdditionalDependencies>%(AdditionalDependencies);snappy.lib;snappyd.lib;squish.lib;squishd.lib</AdditionalDependencies>
-			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64</AdditionalLibraryDirectories>
+			<AdditionalDependencies>%(AdditionalDependencies);snappy.lib;squish.lib</AdditionalDependencies>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxHapImage\libs\snappy\lib\vs\x64\Release;..\..\..\addons\ofxHapImage\libs\squish\lib\vs\x64\Release</AdditionalLibraryDirectories>
 		</Link>
 		<PostBuildEvent />
 	</ItemDefinitionGroup>
