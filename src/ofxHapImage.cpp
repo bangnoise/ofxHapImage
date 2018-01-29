@@ -1,5 +1,6 @@
 #include "ofxHapImage.h"
 #include <hap.h>
+#include <hap_old_images.h>
 #include <squish.h>
 #include <YCoCg.h>
 #include <YCoCgDXT.h>
@@ -140,9 +141,19 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
     const void *frame = nullptr;
     unsigned long frame_size = 0;
     unsigned int result = HapImageReadHeader(buffer.getData(), buffer.size(), &width, &height, &frame);
-    if (result == HapResult_No_Error)
+    if (result != HapResult_No_Error)
+    {
+        // Try the old format to be helpful to anyone with images encoded in it
+        result = HapOldGetFrameDimensions(buffer.getData(), buffer.size(), &width, &height);
+        frame = buffer.getData();
+        frame_size = buffer.size();
+    }
+    else
     {
         frame_size = buffer.size() - (((const char *)frame) - buffer.getData());
+    }
+    if (result == HapResult_No_Error)
+    {
         // TODO: deal with count != 1 at least by error
         result = HapGetFrameTextureCount(frame, frame_size, &count);
     }
