@@ -132,13 +132,25 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
 {
     // TODO: we could postpone this until we need the dxt data
     // so that loadImage() -> saveImage() doesn't do a needless decode/encode cycle
-    unsigned int width;
-    unsigned int height;
+    unsigned int count;
+    unsigned int width = 0;
+    unsigned int height = 0;
     unsigned int dimensions_valid;
     unsigned int format;
-
-    unsigned int result = HapGetFrameDetails(buffer.getData(), buffer.size(), &width, &height, &dimensions_valid, &format);
-    if (result == HapResult_No_Error && dimensions_valid != 0)
+    const void *frame = nullptr;
+    unsigned long frame_size = 0;
+    unsigned int result = HapImageReadHeader(buffer.getData(), buffer.size(), &width, &height, &frame);
+    if (result == HapResult_No_Error)
+    {
+        frame_size = buffer.size() - (((const char *)frame) - buffer.getData());
+        // TODO: deal with count != 1 at least by error
+        result = HapGetFrameTextureCount(frame, frame_size, &count);
+    }
+    if (result == HapResult_No_Error)
+    {
+        result = HapGetFrameTextureFormat(frame, frame_size, 0, &format);
+    }
+    if (result == HapResult_No_Error && width != 0 && height != 0)
     {
         switch (format) {
             case HapTextureFormat_RGB_DXT1:
@@ -166,7 +178,7 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
         {
             dxt_buffer_.allocate(decompressed_size);
         }
-        result = HapDecode(buffer.getData(), buffer.size(), ofxHapImagePrivate::decodeCallback, NULL, dxt_buffer_.getData(), dxt_buffer_.size(), &output_buffer_bytes_used, &format);
+        result = HapDecode(frame, frame_size, 0, ofxHapImagePrivate::decodeCallback, NULL, dxt_buffer_.getData(), dxt_buffer_.size(), &output_buffer_bytes_used, &format);
     }
     if (result == HapResult_No_Error)
     {
@@ -338,17 +350,28 @@ bool ofxHapImage::saveImage(std::vector<char>& destination)
         default:
             break;
     }
-    destination.resize(HapMaxEncodedLength(dxt_buffer_.size(), format, kofxHapImageEncodeChunkCount));
+    unsigned long tex_size = dxt_buffer_.size();
+    unsigned int chunk_count = kofxHapImageEncodeChunkCount;
+    destination.resize(HapMaxEncodedLength(1, &tex_size, &format, &chunk_count) + 16);
     unsigned long buffer_used = 0;
-    unsigned int result = HapEncode(dxt_buffer_.getData(),
-                                    dxt_buffer_.size(),
-                                    format,
-                                    width_, height_,
-                                    HapCompressorSnappy,
-                                    kofxHapImageEncodeChunkCount,
-                                    &destination[0],
-                                    destination.size(),
-                                    &buffer_used);
+    const void *input = dxt_buffer_.getData();
+    unsigned int compressor = HapCompressorSnappy;
+
+    unsigned int result = HapImageWriteHeader(width_, height_, &destination[0], destination.size(), &buffer_used);
+    if (result == HapResult_No_Error)
+    {
+        unsigned long header_used = buffer_used;
+        result = HapEncode(1,
+                           &input,
+                           &tex_size,
+                           &format,
+                           &compressor,
+                           &chunk_count,
+                           &destination[buffer_used],
+                           destination.size() - buffer_used,
+                           &buffer_used);
+        buffer_used += header_used;
+    }
     if (result == HapResult_No_Error)
     {
         destination.resize(buffer_used);

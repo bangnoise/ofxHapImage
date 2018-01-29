@@ -1,18 +1,18 @@
 /*
  hap.h
-
+ 
  Copyright (c) 2011-2013, Tom Butterworth and Vidvox LLC. All rights reserved.
-
+ 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
-
+ 
  * Redistributions of source code must retain the above copyright
  notice, this list of conditions and the following disclaimer.
-
+ 
  * Redistributions in binary form must reproduce the above copyright
  notice, this list of conditions and the following disclaimer in the
  documentation and/or other materials provided with the distribution.
-
+ 
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -32,89 +32,135 @@
 extern "C" {
 #endif
 
-    /*
-     These match the constants defined by GL_EXT_texture_compression_s3tc
-     */
+/*
+ These match the constants defined by GL_EXT_texture_compression_s3tc and
+ GL_ARB_texture_compression_rgtc
+ */
 
-    enum HapTextureFormat {
-        HapTextureFormat_RGB_DXT1 = 0x83F0,
-        HapTextureFormat_RGBA_DXT5 = 0x83F3,
-        HapTextureFormat_YCoCg_DXT5 = 0x01
-    };
+enum HapTextureFormat {
+    HapTextureFormat_RGB_DXT1 = 0x83F0,
+    HapTextureFormat_RGBA_DXT5 = 0x83F3,
+    HapTextureFormat_YCoCg_DXT5 = 0x01,
+    HapTextureFormat_A_RGTC1 = 0x8DBB
+};
 
-    enum HapCompressor {
-        HapCompressorNone,
-        HapCompressorSnappy
-    };
+enum HapCompressor {
+    HapCompressorNone,
+    HapCompressorSnappy
+};
 
-    enum HapResult {
-        HapResult_No_Error = 0,
-        HapResult_Bad_Arguments,
-        HapResult_Buffer_Too_Small,
-        HapResult_Bad_Frame,
-        HapResult_Internal_Error
-    };
+enum HapResult {
+    HapResult_No_Error = 0,
+    HapResult_Bad_Arguments,
+    HapResult_Buffer_Too_Small,
+    HapResult_Bad_Frame,
+    HapResult_Bad_Image,
+    HapResult_Internal_Error
+};
 
-    /*
-     See HapDecode for descriptions of these function types.
-     */
-    typedef void (*HapDecodeWorkFunction)(void *p, unsigned int index);
-    typedef void (*HapDecodeCallback)(HapDecodeWorkFunction function, void *p, unsigned int count, void *info);
+/*
+ See HapDecode for descriptions of these function types.
+ */
+typedef void (*HapDecodeWorkFunction)(void *p, unsigned int index);
+typedef void (*HapDecodeCallback)(HapDecodeWorkFunction function, void *p, unsigned int count, void *info);
 
-    /*
-     Returns the maximum size of an output buffer for an input buffer of inputBytes length.
-     */
-    unsigned long HapMaxEncodedLength(unsigned long inputBytes, unsigned int textureFormat, unsigned int chunkCount);
+/*
+ Returns the maximum size of an output buffer for a frame composed of one or more textures, or returns 0 on error.
+ count is the number of textures (1 or 2) and matches the number of values in the array arguments
+ lengths is an array of input texture lengths in bytes
+ textureFormats is an array of HapTextureFormats
+ chunkCounts is an array of chunk counts (1 or more)
+ */
+unsigned long HapMaxEncodedLength(unsigned int count,
+                                  unsigned long *lengths,
+                                  unsigned int *textureFormats,
+                                  unsigned int *chunkCounts);
 
-    /*
-     Encodes inputBuffer which is a buffer containing texture data of format textureFormat, or returns an error.
-     Use HapMaxEncodedLength() to discover the minimal value for outputBufferBytes
-     If width and height are non-zero, dimensions will be recorded in the encoded frame
-     If this returns HapResult_No_Error and outputBufferBytesUsed is not NULL then outputBufferBytesUsed will be set
-     to the actual encoded length of the output buffer.
-     */
-    unsigned int HapEncode(const void *inputBuffer, unsigned long inputBufferBytes, unsigned int textureFormat,
-                           unsigned int width, unsigned int height, unsigned int compressor, unsigned int chunkCount,
-                           void *outputBuffer, unsigned long outputBufferBytes, unsigned long *outputBufferBytesUsed);
+/*
+ Encodes one or multiple textures into one Hap frame, or returns an error.
 
-    /*
-     Decodes inputBuffer which is a Hap frame.
-     
-     If the frame permits multithreaded decoding, callback will be called once for you to invoke a platform-appropriate
-     mechanism to assign work to threads, and trigger that work by calling the function passed to your callback the number
-     of times indicated by the count argument, usually from a number of different threads. This callback must not return
-     until all the work has been completed.
+ Permitted multiple-texture combinations are:
+  HapTextureFormat_YCoCg_DXT5 + HapTextureFormat_A_RGTC1
 
-     void MyHapDecodeCallback(HapDecodeWorkFunction function, void *p, unsigned int count, void *info)
-     {
+ Use HapMaxEncodedLength() to discover the minimal value for outputBufferBytes.
+ count is the number of textures (1 or 2) and matches the number of values in the array arguments
+ inputBuffers is an array of count pointers to texture data
+ inputBufferBytes is an array of texture data lengths in bytes
+ textureFormats is an array of HapTextureFormats
+ compressors is an array of HapCompressors
+ chunkCounts is an array of chunk counts to permit multithreaded decoding (1 or more)
+ outputBuffer is the destination buffer to receive the encoded frame
+ outputBufferBytes is the destination buffer's length in bytes
+ outputBufferBytesUsed will be set to the actual encoded length of the frame on return
+*/
+unsigned int HapEncode(unsigned int count,
+                       const void **inputBuffers, unsigned long *inputBuffersBytes,
+                       unsigned int *textureFormats,
+                       unsigned int *compressors,
+                       unsigned int *chunkCounts,
+                       void *outputBuffer, unsigned long outputBufferBytes,
+                       unsigned long *outputBufferBytesUsed);
+
+/*
+ Decodes a texture from inputBuffer which is a Hap frame.
+
+ A frame may contain multiple textures which are to be combined to create the final image. Use HapGetFrameTextureCount()
+ to discover the number of textures in a frame, and then access each texture by incrementing the index argument to this
+ function.
+
+ If the frame permits multithreaded decoding, callback will be called once for you to invoke a platform-appropriate
+ mechanism to assign work to threads, and trigger that work by calling the function passed to your callback the number
+ of times indicated by the count argument, usually from a number of different threads. This callback must not return
+ until all the work has been completed.
+
+ void MyHapDecodeCallback(HapDecodeWorkFunction function, void *p, unsigned int count, void *info)
+ {
      int i;
      for (i = 0; i < count; i++) {
-     // Invoke your multithreading mechanism to cause this function to be called
-     // on a suitable number of threads.
-     function(p, i);
+         // Invoke your multithreading mechanism to cause this function to be called
+         // on a suitable number of threads.
+         function(p, i);
      }
-     }
-     info is an argument for your own use to pass context to the callback.
-     If the frame does not permit multithreaded decoding, callback will not be called.
-     If outputBufferBytesUsed is not NULL then it will be set to the decoded length of the output buffer.
-     outputBufferTextureFormat must be non-NULL, and will be set to one of the HapTextureFormat constants.
-     */
-    unsigned int HapDecode(const void *inputBuffer, unsigned long inputBufferBytes,
-                           HapDecodeCallback callback, void *info,
-                           void *outputBuffer, unsigned long outputBufferBytes,
-                           unsigned long *outputBufferBytesUsed,
-                           unsigned int *outputBufferTextureFormat);
+ }
+ info is an argument for your own use to pass context to the callback.
+ If the frame does not permit multithreaded decoding, callback will not be called.
+ If outputBufferBytesUsed is not NULL then it will be set to the decoded length of the output buffer.
+ outputBufferTextureFormat must be non-NULL, and will be set to one of the HapTextureFormat constants.
+ */
+unsigned int HapDecode(const void *inputBuffer, unsigned long inputBufferBytes,
+                       unsigned int index,
+                       HapDecodeCallback callback, void *info,
+                       void *outputBuffer, unsigned long outputBufferBytes,
+                       unsigned long *outputBufferBytesUsed,
+                       unsigned int *outputBufferTextureFormat);
 
-    /*
-     Returns a HapResult error code, and if that is HapResult_No_Error:
-     - if frame dimensions are stored, sets dimensionsValid to a non-zero value and sets width and height
-     - sets textureFormat to a HapTextureFormat constant describing the texture format of the frame
-     */
-    unsigned int HapGetFrameDetails(const void *inputBuffer, unsigned long inputBufferBytes,
-                                    unsigned int *width, unsigned int *height,
-                                    unsigned int *dimensionsValid,
-                                    unsigned int *textureFormat);
-    
+/*
+ If this returns HapResult_No_Error then outputTextureCount is set to the count of textures in the frame.
+ */
+unsigned int HapGetFrameTextureCount(const void *inputBuffer, unsigned long inputBufferBytes, unsigned int *outputTextureCount);
+
+/*
+ On return sets outputBufferTextureFormat to a HapTextureFormat constant describing the format of the texture at index in the frame.
+ */
+unsigned int HapGetFrameTextureFormat(const void *inputBuffer, unsigned long inputBufferBytes, unsigned int index, unsigned int *outputBufferTextureFormat);
+
+/*
+ Hap Image
+ */
+/*
+ Parses a Hap Image header and on success sets width, height and frame and returns HapResult_No_Error.
+ The value returned in frame may subsequently be passed to the HapGet...() and HapDecode() functions.
+ */
+unsigned int HapImageReadHeader(const void *inputBuffer, unsigned long inputBufferBytes, unsigned int *width, unsigned int *height, const void **frame);
+/*
+ Generates a Hap Image header in outputBuffer and returns HapResult_No_Error on success.
+ When saving a Hap Image file the generated header must immediately precede a frame created with HapEncode().
+ For this encoder, outputBuffer must be at least 16 bytes long. Note that decoders must not rely on headers being of any fixed length.
+ outputBufferBytesUsed will be set to the length of the generated header in bytes.
+ */
+unsigned int HapImageWriteHeader(unsigned int width, unsigned int height,
+                                 void *outputBuffer, unsigned long outputBufferBytes,
+                                 unsigned long *outputBufferBytesUsed);
 #ifdef __cplusplus
 }
 #endif
