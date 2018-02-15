@@ -54,7 +54,6 @@ enum HapResult {
     HapResult_Bad_Arguments,
     HapResult_Buffer_Too_Small,
     HapResult_Bad_Frame,
-    HapResult_Bad_Image,
     HapResult_Internal_Error
 };
 
@@ -144,23 +143,6 @@ unsigned int HapGetFrameTextureCount(const void *inputBuffer, unsigned long inpu
  */
 unsigned int HapGetFrameTextureFormat(const void *inputBuffer, unsigned long inputBufferBytes, unsigned int index, unsigned int *outputBufferTextureFormat);
 
-/*
- Hap Image
- */
-/*
- Parses a Hap Image header and on success sets width, height and frame and returns HapResult_No_Error.
- The value returned in frame may subsequently be passed to the HapGet...() and HapDecode() functions.
- */
-unsigned int HapImageReadHeader(const void *inputBuffer, unsigned long inputBufferBytes, unsigned int *width, unsigned int *height, const void **frame);
-/*
- Generates a Hap Image header in outputBuffer and returns HapResult_No_Error on success.
- When saving a Hap Image file the generated header must immediately precede a frame created with HapEncode().
- For this encoder, outputBuffer must be at least 16 bytes long. Note that decoders must not rely on headers being of any fixed length.
- outputBufferBytesUsed will be set to the length of the generated header in bytes.
- */
-unsigned int HapImageWriteHeader(unsigned int width, unsigned int height,
-                                 void *outputBuffer, unsigned long outputBufferBytes,
-                                 unsigned long *outputBufferBytesUsed);
 #ifdef __cplusplus
 }
 #endif

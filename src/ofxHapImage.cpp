@@ -1,5 +1,6 @@
 #include "ofxHapImage.h"
 #include <hap.h>
+#include <hapimage.h>
 #include <hap_old_images.h>
 #include <squish.h>
 #include <YCoCg.h>
@@ -140,17 +141,13 @@ bool ofxHapImage::loadImage(const ofBuffer &buffer)
     unsigned int format;
     const void *frame = nullptr;
     unsigned long frame_size = 0;
-    unsigned int result = HapImageReadHeader(buffer.getData(), buffer.size(), &width, &height, &frame);
-    if (result != HapResult_No_Error)
+    unsigned int result = HapImageRead(buffer.getData(), buffer.size(), &width, &height, &frame, &frame_size);
+    if (result != HapImageResult_No_Error)
     {
         // Try the old format to be helpful to anyone with images encoded in it
         result = HapOldGetFrameDimensions(buffer.getData(), buffer.size(), &width, &height);
         frame = buffer.getData();
         frame_size = buffer.size();
-    }
-    else
-    {
-        frame_size = buffer.size() - (((const char *)frame) - buffer.getData());
     }
     if (result == HapResult_No_Error)
     {
@@ -368,8 +365,8 @@ bool ofxHapImage::saveImage(std::vector<char>& destination)
     const void *input = dxt_buffer_.getData();
     unsigned int compressor = HapCompressorSnappy;
 
-    unsigned int result = HapImageWriteHeader(width_, height_, &destination[0], destination.size(), &buffer_used);
-    if (result == HapResult_No_Error)
+    unsigned int result = HapImageWrite(width_, height_, &destination[0], destination.size(), &buffer_used);
+    if (result == HapImageResult_No_Error)
     {
         unsigned long header_used = buffer_used;
         result = HapEncode(1,
